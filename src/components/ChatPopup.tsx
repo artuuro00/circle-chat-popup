@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, X, RefreshCw } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import ReactMarkdown from "react-markdown";
 
 interface ChatPopupProps {
   onClose: () => void;
@@ -191,7 +192,13 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
                   : "bg-blue-500 text-white"
               }`}
             >
-              {msg.text}
+              {msg.isBot ? (
+                <ReactMarkdown className="prose prose-sm max-w-none">
+                  {msg.text}
+                </ReactMarkdown>
+              ) : (
+                msg.text
+              )}
             </div>
           </div>
         ))}
