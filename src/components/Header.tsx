@@ -10,7 +10,7 @@ const Header = () => {
             <img src="/lovable-uploads/56a1af5d-2ce5-48dd-8b0a-9b91caf71486.png" alt="Inicio" className="w-6 h-6" />
           </div>
         </div>
-        <div className="text-lg font-bold flex items-center">INICIO</div>
+        <div className="text-lg font-bold">INICIO</div>
       </div>
     </div>
   );
