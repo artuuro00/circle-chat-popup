@@ -1,9 +1,12 @@
 
-import { Home, FileText, Monitor, CheckSquare, BarChart2, Settings, MessageCircle, Calendar } from "lucide-react";
+import { Home, FileText, Monitor, CheckSquare, BarChart2, Settings, MessageCircle, Calendar, Hash } from "lucide-react";
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
+      <div className="sidebar-icon text-red-600">
+        <Hash size={20} />
+      </div>
       <div className="sidebar-icon">
         <Home size={20} />
       </div>

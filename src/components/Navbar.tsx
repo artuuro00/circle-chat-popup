@@ -6,14 +6,14 @@ const Navbar = () => {
     <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-10">
       <div className="flex items-center space-x-4">
         <img 
-          src="https://www.upv.es/firma-e/asignatura/xupv-fondoblanco.png" 
+          src="/lovable-uploads/fdb28f17-45f3-4ede-b47c-074491568509.png" 
           alt="UPV Logo" 
-          className="university-logo"
+          className="university-logo h-9"
         />
         <div className="text-lg font-semibold flex items-center">
           <span className="text-muted-foreground">poli</span>
-          <span className="text-primary">[forma</span>
-          <span className="text-primary">T]</span>
+          <span className="text-red-600">[forma</span>
+          <span className="text-red-600">T]</span>
         </div>
       </div>
 
@@ -22,7 +22,10 @@ const Navbar = () => {
           <Bell size={20} />
           <span className="notification-badge">17</span>
         </div>
-        <div className="text-sm">Arturo</div>
+        <div className="flex items-center">
+          <div className="text-sm">Arturo</div>
+          <ChevronDown size={14} className="ml-1" />
+        </div>
       </div>
     </nav>
   );

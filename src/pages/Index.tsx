@@ -5,15 +5,16 @@ import Navigation from "@/components/Navigation";
 import Header from "@/components/Header";
 import ContentArea from "@/components/ContentArea";
 import ChatButton from "@/components/ChatButton";
+import { ChevronDown } from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#1C1C1C]">
       <Navbar />
-      <Sidebar />
       <Navigation />
+      <Sidebar />
       <Header />
-      <div className="pt-44">
+      <div className="pt-32">
         <ContentArea />
       </div>
       <ChatButton />
