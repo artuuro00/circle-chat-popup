@@ -68,6 +68,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
 }
 
 .sidebar {
@@ -81,7 +82,7 @@
 }
 
 .sidebar-icon {
-  margin: 12px 0;
+  margin: 16px 0;
   width: 40px;
   height: 40px;
   display: flex;
@@ -120,6 +121,7 @@
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 .content-title {
@@ -147,6 +149,7 @@
   font-weight: 600;
   font-size: 16px;
   color: #FFF;
+  margin-bottom: 8px;
 }
 
 .card-subtitle {
@@ -265,4 +268,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.chat-popup {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 320px;
+  max-height: 70vh;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.nav-pill {
+  height: 32px;
+  background-color: var(--gray-800);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  margin-right: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  gap: 4px;
+}
+
+.nav-pill:hover {
+  background-color: var(--gray-700);
+}
+
+.nav-pill.active {
+  background-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.nav-pill svg {
+  fill: currentColor;
 }

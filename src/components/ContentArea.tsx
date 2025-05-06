@@ -61,6 +61,8 @@ const ContentArea = () => {
               <span>Enlace</span>
             </button>
           </div>
+          
+          <p className="content-paragraph">Actualmente, no hay mensajes en esta ubicación.</p>
         </div>
 
         <div className="content-card">
@@ -81,7 +83,7 @@ const ContentArea = () => {
             </button>
           </div>
 
-          <h3 className="text-lg font-semibold text-white">mayo 2025</h3>
+          <h3 className="text-lg font-bold text-white mb-3">mayo 2025</h3>
           
           <div className="mt-8 text-center">
             <button className="px-2 py-1 rounded bg-accent text-white">Hoy</button>
