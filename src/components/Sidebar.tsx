@@ -5,9 +5,11 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-icon text-red-600">
-        <div className="bg-red-600 px-1 py-0.5 text-xs font-bold text-white">
-          08
-        </div>
+        <img 
+          src="/lovable-uploads/3161486f-b996-478b-aed8-27a1429fcab2.png" 
+          alt="Logo" 
+          className="w-6 h-6"
+        />
       </div>
       <div className="sidebar-icon">
         <AlertCircle size={20} />
