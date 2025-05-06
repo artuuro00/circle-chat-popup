@@ -60,7 +60,7 @@
 }
 
 .navbar {
-  @apply bg-[#1A1A1A] border-b border-[#2C2C2C];
+  @apply border-b border-[#2C2C2C];
 }
 
 .sidebar {
@@ -76,7 +76,7 @@
 }
 
 .content-card {
-  @apply bg-card rounded-md shadow-md p-4 flex-1;
+  @apply rounded-md shadow-md p-4 flex-1;
 }
 
 .content-title {
