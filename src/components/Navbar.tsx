@@ -1,54 +1,30 @@
 
-import { Bell, ChevronDown, Grid } from "lucide-react";
+import { ChevronDown, Bell } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <nav className="navbar">
-      <div className="flex items-center">
+    <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-20">
+      <div className="flex items-center space-x-4">
         <img 
           src="/lovable-uploads/e4c4c78f-35f2-4a8f-ab69-e36bf03ccbec.png" 
           alt="UPV Logo" 
-          className="h-8 w-8 ml-4"
+          className="university-logo h-11"
         />
-        <div className="text-lg font-semibold text-white ml-3">
-          Universitat Politècnica de València
-        </div>
-      </div>
-      
-      <div className="breadcrumb">
-        <div className="breadcrumb-item">
-          <span>Mi poliformaT</span>
-          <ChevronDown size={14} />
-        </div>
-        <div className="breadcrumb-item">
-          <span>D.A. Fac. Ade</span>
-          <ChevronDown size={14} />
-        </div>
-        <div className="breadcrumb-item">
-          <span>2024-CFS 2024-25</span>
-          <ChevronDown size={14} />
-        </div>
-        <div className="breadcrumb-item">
-          <span>Dirección de Producción y Operaciones</span>
-          <ChevronDown size={14} />
-        </div>
-        <div className="breadcrumb-item active">
-          <span>Econometría</span>
-          <ChevronDown size={14} />
+        <div className="text-lg font-semibold flex items-center">
+          <span className="text-muted-foreground">poli</span>
+          <span className="text-red-600">[forma</span>
+          <span className="text-red-600">T]</span>
         </div>
       </div>
 
-      <div className="utilities">
-        <div className="notification-container">
+      <div className="ml-auto flex items-center space-x-3">
+        <div className="relative">
           <Bell size={20} />
           <span className="notification-badge">17</span>
         </div>
-        <div className="utility-item">
-          <Grid size={20} />
-        </div>
-        <div className="utility-item">
-          <div className="font-medium">Arturo</div>
-          <ChevronDown size={14} />
+        <div className="flex items-center">
+          <div className="text-sm font-medium">Arturo</div>
+          <ChevronDown size={14} className="ml-1" />
         </div>
       </div>
     </nav>

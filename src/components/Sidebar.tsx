@@ -4,32 +4,32 @@ import { Home, FileText, Monitor, CheckSquare, BarChart2, Settings, MessageCircl
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <div className="sidebar-icon active">
-        <Hash size={24} />
+      <div className="sidebar-icon text-red-600">
+        <Hash size={20} />
       </div>
       <div className="sidebar-icon">
-        <Home size={24} />
+        <Home size={20} />
       </div>
       <div className="sidebar-icon">
-        <FileText size={24} />
+        <FileText size={20} />
       </div>
       <div className="sidebar-icon">
-        <Monitor size={24} />
+        <Monitor size={20} />
       </div>
       <div className="sidebar-icon">
-        <CheckSquare size={24} />
+        <CheckSquare size={20} />
       </div>
       <div className="sidebar-icon">
-        <BarChart2 size={24} />
+        <BarChart2 size={20} />
       </div>
       <div className="sidebar-icon">
-        <Calendar size={24} />
+        <Calendar size={20} />
       </div>
       <div className="sidebar-icon">
-        <MessageCircle size={24} />
+        <MessageCircle size={20} />
       </div>
-      <div className="sidebar-icon sidebar-bottom">
-        <Settings size={24} />
+      <div className="sidebar-icon">
+        <Settings size={20} />
       </div>
     </div>
   );
