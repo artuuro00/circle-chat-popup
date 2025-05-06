@@ -12,9 +12,9 @@ const ChatButton = () => {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 rounded-md flex items-center justify-center gap-2 px-3 py-2 cursor-pointer shadow-md z-50" onClick={toggleChat}>
+      <div className="fixed bottom-4 right-4 bg-red-600 rounded-md flex items-center justify-center px-3 py-2 cursor-pointer shadow-md z-50" onClick={toggleChat}>
         <Users size={18} color="white" />
-        <div className="bg-red-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">9</div>
+        <span className="ml-2 bg-red-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">30</span>
       </div>
       {isOpen && <ChatPopup onClose={() => setIsOpen(false)} />}
     </>

@@ -3,7 +3,7 @@ import { ChevronDown, Home, Star } from "lucide-react";
 
 const Navigation = () => {
   return (
-    <div className="fixed top-16 left-14 right-0 bg-[#2a2a2a] h-12 flex items-center px-2 z-10 overflow-x-auto">
+    <div className="fixed top-16 left-14 right-0 bg-[#2a2a2a] h-12 flex items-center px-2 z-10">
       <div className="nav-pill">
         <Home size={14} />
         <span>Mi poliformaT</span>
