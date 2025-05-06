@@ -5,7 +5,6 @@ import Navigation from "@/components/Navigation";
 import Header from "@/components/Header";
 import ContentArea from "@/components/ContentArea";
 import ChatButton from "@/components/ChatButton";
-import { ChevronDown } from "lucide-react";
 
 const Index = () => {
   return (
