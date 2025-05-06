@@ -10,11 +10,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#1C1C1C]">
       <Navbar />
-      <Navigation />
-      <Sidebar />
-      <Header />
-      <div className="pt-32">
-        <ContentArea />
+      <div className="flex">
+        <Sidebar />
+        <div className="flex flex-col flex-grow">
+          <Navigation />
+          <Header />
+          <div className="pt-36 pl-14">
+            <ContentArea />
+          </div>
+        </div>
       </div>
       <ChatButton />
     </div>

@@ -42,14 +42,14 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
 
   return (
     <div className="chat-popup flex flex-col">
-      <div className="bg-accent p-3 flex justify-between items-center">
-        <h3 className="font-semibold text-white">Mensajes de chat</h3>
+      <div className="bg-accent p-2 flex justify-between items-center">
+        <h3 className="font-semibold text-white text-sm">Mensajes de chat</h3>
         <button onClick={onClose} className="text-white hover:text-gray-200">
-          <X size={20} />
+          <X size={16} />
         </button>
       </div>
 
-      <div className="flex-grow bg-white p-4 overflow-y-auto h-80">
+      <div className="flex-grow bg-white p-3 overflow-y-auto h-80">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -70,13 +70,13 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
         ))}
       </div>
 
-      <div className="bg-gray-100 p-3 flex gap-2">
+      <div className="bg-gray-100 p-2 flex gap-2">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Escribe un mensaje..."
-          className="flex-grow p-2 border rounded-md"
+          className="flex-grow p-2 border rounded-md text-sm"
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               handleSendMessage();
@@ -87,7 +87,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
           onClick={handleSendMessage}
           className="bg-accent hover:bg-accent/90 text-white p-2 rounded-md"
         >
-          <Send size={20} />
+          <Send size={16} />
         </button>
       </div>
     </div>

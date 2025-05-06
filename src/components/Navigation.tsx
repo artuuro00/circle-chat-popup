@@ -1,5 +1,5 @@
 
-import { ChevronDown, Star, Home } from "lucide-react";
+import { ChevronDown, Home, Star } from "lucide-react";
 
 const Navigation = () => {
   return (
