@@ -59,9 +59,8 @@
   max-height: 70vh;
 }
 
-/* Remove .navbar class styles to prevent override */
 .navbar {
-  @apply border-b border-[#2C2C2C];
+  @apply bg-[#1A1A1A] border-b border-[#2C2C2C];
 }
 
 .sidebar {
