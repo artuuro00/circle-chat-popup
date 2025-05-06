@@ -7,7 +7,7 @@ const Header = () => {
       <div className="flex items-center space-x-2">
         <div className="flex items-center">
           <div className="flex items-center justify-center">
-            <img src="/lovable-uploads/56a1af5d-2ce5-48dd-8b0a-9b91caf71486.png" alt="Inicio" className="w-5 h-5" />
+            <img src="/lovable-uploads/56a1af5d-2ce5-48dd-8b0a-9b91caf71486.png" alt="Inicio" className="w-4 h-4" />
           </div>
         </div>
         <div className="text-lg font-bold">INICIO</div>
