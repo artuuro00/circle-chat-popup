@@ -1,5 +1,5 @@
 
-import { Bell, ChevronDown } from "lucide-react";
+import { ChevronDown, Bell } from "lucide-react";
 
 const Navbar = () => {
   return (
