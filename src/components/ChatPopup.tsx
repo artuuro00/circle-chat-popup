@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
-import { Send, X } from "lucide-react";
+import { Send, X, RefreshCw } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 
 interface ChatPopupProps {
   onClose: () => void;
@@ -106,13 +107,42 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
     }
   };
 
+  const handleRefreshSession = () => {
+    // Clear session ID from state and localStorage
+    setSessionId(null);
+    localStorage.removeItem("chatSessionId");
+    
+    // Add system message indicating the conversation has been reset
+    setMessages([
+      {
+        id: 1,
+        text: "¡Hola! Soy el chatbot de PoliFormaT. He iniciado una nueva conversación. ¿En qué puedo ayudarte?",
+        isBot: true,
+      }
+    ]);
+    
+    toast.success("Conversación reiniciada correctamente");
+  };
+
   return (
     <div className="chat-popup flex flex-col">
       <div className="bg-accent p-2 flex justify-between items-center">
         <h3 className="font-semibold text-white text-sm">Mensajes de chat</h3>
-        <button onClick={onClose} className="text-white hover:text-gray-200">
-          <X size={16} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={handleRefreshSession} 
+            className="text-white hover:text-gray-200"
+            title="Reiniciar conversación"
+          >
+            <RefreshCw size={16} />
+          </button>
+          <button 
+            onClick={onClose} 
+            className="text-white hover:text-gray-200"
+          >
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       <div className="flex-grow bg-white p-3 overflow-y-auto h-80">
