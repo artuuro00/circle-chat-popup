@@ -1,23 +1,37 @@
 
-import { Home, FileText, Monitor, CheckSquare, BarChart2, Settings, MessageCircle, Calendar, Hash } from "lucide-react";
+import { FileText, BookOpen, Briefcase, CheckSquare, Settings, BarChart2, Calendar, MessageCircle, Hash, AlertCircle, Volume2, ChevronRight } from "lucide-react";
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-icon text-red-600">
-        <Hash size={20} />
+        <div className="bg-red-600 px-1 py-0.5 text-xs font-bold text-white">
+          08
+        </div>
       </div>
       <div className="sidebar-icon">
-        <Home size={20} />
+        <AlertCircle size={20} />
+      </div>
+      <div className="sidebar-icon">
+        <Briefcase size={20} />
+      </div>
+      <div className="sidebar-icon">
+        <BookOpen size={20} />
+      </div>
+      <div className="sidebar-icon">
+        <BookOpen size={20} />
+      </div>
+      <div className="sidebar-icon">
+        <BookOpen size={20} />
       </div>
       <div className="sidebar-icon">
         <FileText size={20} />
       </div>
       <div className="sidebar-icon">
-        <Monitor size={20} />
+        <CheckSquare size={20} />
       </div>
       <div className="sidebar-icon">
-        <CheckSquare size={20} />
+        <Settings size={20} />
       </div>
       <div className="sidebar-icon">
         <BarChart2 size={20} />
@@ -26,10 +40,13 @@ const Sidebar = () => {
         <Calendar size={20} />
       </div>
       <div className="sidebar-icon">
+        <Volume2 size={20} />
+      </div>
+      <div className="sidebar-icon">
         <MessageCircle size={20} />
       </div>
       <div className="sidebar-icon">
-        <Settings size={20} />
+        <ChevronRight size={20} />
       </div>
     </div>
   );
