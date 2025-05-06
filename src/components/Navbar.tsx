@@ -3,12 +3,12 @@ import { ChevronDown, Bell } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-20 bg-[#1A1A1A] border-b border-[#2C2C2C]">
-      <div className="flex items-center space-x-2">
+    <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-20">
+      <div className="flex items-center space-x-4">
         <img 
-          src="/lovable-uploads/3ee6e8b0-18c6-4086-a5d4-ba372ef09d85.png" 
+          src="/lovable-uploads/e4c4c78f-35f2-4a8f-ab69-e36bf03ccbec.png" 
           alt="UPV Logo" 
-          className="h-10 mr-2"
+          className="university-logo h-11"
         />
         <div className="text-lg font-semibold flex items-center">
           <span className="text-muted-foreground">poli</span>
@@ -17,10 +17,10 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="ml-auto flex items-center space-x-4">
+      <div className="ml-auto flex items-center space-x-3">
         <div className="relative">
           <Bell size={20} />
-          <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-semibold">17</span>
+          <span className="notification-badge">17</span>
         </div>
         <div className="flex items-center">
           <div className="text-sm font-medium">Arturo</div>
