@@ -3,14 +3,14 @@ import { ChevronDown, Bell } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-20">
+    <nav className="navbar fixed top-0 left-0 right-0 h-16 flex items-center px-4 z-20 bg-black">
       <div className="flex items-center space-x-4">
         <img 
           src="/lovable-uploads/e4c4c78f-35f2-4a8f-ab69-e36bf03ccbec.png" 
           alt="UPV Logo" 
           className="university-logo h-11"
         />
-        <div className="text-lg font-semibold flex items-center">
+        <div className="text-lg font-semibold flex items-center bg-[#222222] px-3 py-1 rounded-sm">
           <span className="text-muted-foreground">poli</span>
           <span className="text-red-600">[forma</span>
           <span className="text-red-600">T]</span>
