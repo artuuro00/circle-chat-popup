@@ -5,31 +5,31 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-icon active">
-        <Hash size={20} />
+        <Hash size={24} />
       </div>
       <div className="sidebar-icon">
-        <Home size={20} />
+        <Home size={24} />
       </div>
       <div className="sidebar-icon">
-        <FileText size={20} />
+        <FileText size={24} />
       </div>
       <div className="sidebar-icon">
-        <Monitor size={20} />
+        <Monitor size={24} />
       </div>
       <div className="sidebar-icon">
-        <CheckSquare size={20} />
+        <CheckSquare size={24} />
       </div>
       <div className="sidebar-icon">
-        <BarChart2 size={20} />
+        <BarChart2 size={24} />
       </div>
       <div className="sidebar-icon">
-        <Calendar size={20} />
+        <Calendar size={24} />
       </div>
       <div className="sidebar-icon">
-        <MessageCircle size={20} />
+        <MessageCircle size={24} />
       </div>
       <div className="sidebar-icon sidebar-bottom">
-        <Settings size={20} />
+        <Settings size={24} />
       </div>
     </div>
   );

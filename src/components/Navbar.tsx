@@ -4,13 +4,13 @@ import { Bell, ChevronDown, Grid } from "lucide-react";
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center">
         <img 
           src="/lovable-uploads/e4c4c78f-35f2-4a8f-ab69-e36bf03ccbec.png" 
           alt="UPV Logo" 
-          className="h-8 w-8"
+          className="h-8 w-8 ml-4"
         />
-        <div className="text-lg font-semibold text-white">
+        <div className="text-lg font-semibold text-white ml-3">
           Universitat Politècnica de València
         </div>
       </div>
