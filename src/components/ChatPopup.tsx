@@ -15,24 +15,47 @@ interface Message {
 
 const ChatPopup = ({ onClose }: ChatPopupProps) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?",
-      isBot: true,
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch session ID from localStorage on component mount
+  // Fetch session ID and messages from localStorage on component mount
   useEffect(() => {
     const storedSessionId = localStorage.getItem("chatSessionId");
+    const storedMessages = localStorage.getItem("chatMessages");
+    
     if (storedSessionId) {
       setSessionId(storedSessionId);
     }
+    
+    if (storedMessages) {
+      try {
+        const parsedMessages = JSON.parse(storedMessages);
+        setMessages(parsedMessages);
+      } catch (error) {
+        console.error("Error parsing stored messages:", error);
+        setMessages([{
+          id: 1,
+          text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?",
+          isBot: true,
+        }]);
+      }
+    } else {
+      setMessages([{
+        id: 1,
+        text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?",
+        isBot: true,
+      }]);
+    }
   }, []);
+
+  // Save messages to localStorage when they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    }
+  }, [messages]);
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
@@ -111,6 +134,8 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
     // Clear session ID from state and localStorage
     setSessionId(null);
     localStorage.removeItem("chatSessionId");
+    // Clear messages from localStorage
+    localStorage.removeItem("chatMessages");
     
     // Add system message indicating the conversation has been reset
     setMessages([
@@ -122,6 +147,12 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
     ]);
     
     toast.success("Conversación reiniciada correctamente");
+  };
+
+  // Handle closing the popup without refreshing the conversation
+  const handleClose = () => {
+    // We don't need to do anything with localStorage here as messages are already saved by useEffect
+    onClose();
   };
 
   return (
@@ -137,7 +168,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
             <RefreshCw size={16} />
           </button>
           <button 
-            onClick={onClose} 
+            onClick={handleClose} 
             className="text-white hover:text-gray-200"
           >
             <X size={16} />
