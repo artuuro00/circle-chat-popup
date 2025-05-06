@@ -105,12 +105,12 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
         localStorage.setItem("chatSessionId", data.sessionId);
       }
 
-      // Add bot response
+      // Only extract the text field from the API response
       setMessages(prev => [
         ...prev,
         { 
           id: prev.length + 1, 
-          text: data.text || data.answer || "Lo siento, no he podido procesar tu solicitud.", 
+          text: data.text || "Lo siento, no he podido procesar tu solicitud.", 
           isBot: true 
         }
       ]);
@@ -215,7 +215,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Escribe un mensaje..."
-          className="flex-grow p-2 border rounded-md text-sm"
+          className="flex-grow p-2 border rounded-md text-sm text-black"
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               handleSendMessage();
