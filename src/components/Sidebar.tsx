@@ -8,7 +8,7 @@ const Sidebar = () => {
         <img 
           src="/lovable-uploads/5c112b1b-0a65-499e-a408-54bfd99f26e5.png" 
           alt="Logo" 
-          className="w-7 h-7"
+          className="w-11 h-11"
         />
       </div>
       <div className="sidebar-icon">
