@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Send, X, RefreshCw } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
@@ -147,7 +146,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
       }
     ]);
     
-    toast.success("Conversación reiniciada correctamente");
+    // Remove the toast notification - this line was removed
   };
 
   // Handle closing the popup without refreshing the conversation
