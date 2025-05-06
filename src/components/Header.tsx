@@ -6,11 +6,8 @@ const Header = () => {
     <div className="fixed top-28 left-14 right-0 bg-background px-6 py-2 z-10">
       <div className="flex items-center space-x-2">
         <div className="flex items-center">
-          <div className="bg-red-600 text-white w-7 h-7 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <img src="/lovable-uploads/56a1af5d-2ce5-48dd-8b0a-9b91caf71486.png" alt="Inicio" className="w-5 h-5" />
-          </div>
-          <div className="bg-secondary/70 text-white w-7 h-7 flex items-center justify-center ml-0.5">
-            <Hash size={16} />
           </div>
         </div>
         <div className="text-lg font-bold">INICIO</div>
