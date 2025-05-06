@@ -7,7 +7,7 @@ const Header = () => {
       <div className="flex items-center space-x-2">
         <div className="flex items-center">
           <div className="bg-red-600 text-white w-7 h-7 flex items-center justify-center">
-            <Hash size={16} />
+            <img src="/lovable-uploads/56a1af5d-2ce5-48dd-8b0a-9b91caf71486.png" alt="Inicio" className="w-5 h-5" />
           </div>
           <div className="bg-secondary/70 text-white w-7 h-7 flex items-center justify-center ml-0.5">
             <Hash size={16} />
