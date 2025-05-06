@@ -6,7 +6,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-icon text-red-600">
         <img 
-          src="/lovable-uploads/3161486f-b996-478b-aed8-27a1429fcab2.png" 
+          src="/lovable-uploads/5c112b1b-0a65-499e-a408-54bfd99f26e5.png" 
           alt="Logo" 
           className="w-5 h-5"
         />
