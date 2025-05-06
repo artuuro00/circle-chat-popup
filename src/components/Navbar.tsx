@@ -19,7 +19,7 @@ const Navbar = () => {
 
       <div className="ml-auto flex items-center space-x-3">
         <div className="relative">
-          <Bell size={20} className="text-white" />
+          <Bell size={20} className="text-white" fill="white" />
           <span className="notification-badge">17</span>
         </div>
         <div className="flex items-center">
