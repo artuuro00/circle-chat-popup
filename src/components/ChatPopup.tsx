@@ -42,7 +42,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
 
   return (
     <div className="chat-popup flex flex-col">
-      <div className="bg-accent p-2 flex justify-between items-center">
+      <div className="bg-[#E63946] p-2 flex justify-between items-center">
         <h3 className="font-semibold text-white text-sm">Mensajes de chat</h3>
         <button onClick={onClose} className="text-white hover:text-gray-200">
           <X size={16} />
@@ -85,7 +85,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
         />
         <button
           onClick={handleSendMessage}
-          className="bg-accent hover:bg-accent/90 text-white p-2 rounded-md"
+          className="bg-[#E63946] hover:bg-[#E63946]/90 text-white p-2 rounded-md"
         >
           <Send size={16} />
         </button>

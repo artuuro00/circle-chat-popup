@@ -4,7 +4,7 @@ import { Home, FileText, Monitor, CheckSquare, BarChart2, Settings, MessageCircl
 const Sidebar = () => {
   return (
     <div className="sidebar">
-      <div className="sidebar-icon text-red-600">
+      <div className="sidebar-icon active">
         <Hash size={20} />
       </div>
       <div className="sidebar-icon">
@@ -28,7 +28,7 @@ const Sidebar = () => {
       <div className="sidebar-icon">
         <MessageCircle size={20} />
       </div>
-      <div className="sidebar-icon">
+      <div className="sidebar-icon sidebar-bottom">
         <Settings size={20} />
       </div>
     </div>
