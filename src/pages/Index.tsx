@@ -1,7 +1,11 @@
 
+import ChatButton from "../components/ChatButton";
+
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white"></div>
+    <div className="min-h-screen bg-white">
+      <ChatButton />
+    </div>
   );
 };
 

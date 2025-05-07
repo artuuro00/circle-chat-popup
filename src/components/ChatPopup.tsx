@@ -147,42 +147,78 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
       });
       
       if (!runRes.ok) {
-        throw new Error("No se pudo iniciar la ejecución del asistente");
+        const errorText = await runRes.text();
+        console.error(`Error iniciando ejecución [${runRes.status}]: ${errorText}`);
+        throw new Error(`No se pudo iniciar la ejecución (status ${runRes.status}): ${errorText}`);
       }
       
       const runData = await runRes.json();
 
       // 5️⃣ Sondear hasta que la ejecución termine
       let runStatus = runData.status;
-      const RUN_POLL_INTERVAL = 1000; // 1 s
-      const MAX_POLLS = 30; // 30 s máx.
+      const RUN_POLL_INTERVAL = 2000; // 2 segundos (aumentado de 1s)
+      const MAX_POLLS = 60; // 120 segundos máximo (aumentado de 30s)
       let polls = 0;
       
-      while (runStatus !== "completed" && runStatus !== "failed" && polls < MAX_POLLS) {
+      console.log(`Iniciando sondeo de ejecución. ID: ${runData.id}, Estado inicial: ${runStatus}`);
+      
+      while (runStatus !== "completed" && runStatus !== "failed" && runStatus !== "expired" && polls < MAX_POLLS) {
         await new Promise(r => setTimeout(r, RUN_POLL_INTERVAL));
         polls++;
-        const statusRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/runs/${runData.id}`, {
-          method: "GET",
-          headers,
-        });
         
-        if (!statusRes.ok) break;
+        console.log(`Sondeo #${polls}, último estado: ${runStatus}`);
         
-        const statusData = await statusRes.json();
-        runStatus = statusData.status;
+        try {
+          const statusRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/runs/${runData.id}`, {
+            method: "GET",
+            headers,
+          });
+          
+          if (!statusRes.ok) {
+            const errorText = await statusRes.text();
+            console.error(`Error consultando estado [${statusRes.status}]: ${errorText}`);
+            continue; // Intentar de nuevo en la siguiente iteración
+          }
+          
+          const statusData = await statusRes.json();
+          runStatus = statusData.status;
+          console.log(`Nuevo estado: ${runStatus}`);
+          
+          // Si está en requerido o pendiente, esperamos un poco más
+          if (runStatus === "queued" || runStatus === "in_progress") {
+            continue;
+          }
+          
+          // Si está completado, salimos del bucle
+          if (runStatus === "completed") {
+            break;
+          }
+          
+          // Si hay errores o cancelaciones, manejamos adecuadamente
+          if (["failed", "cancelled", "expired"].includes(runStatus)) {
+            throw new Error(`La ejecución terminó con estado: ${runStatus}${statusData.last_error ? ` - ${statusData.last_error?.message}` : ''}`);
+          }
+        } catch (pollError: any) {
+          console.error("Error durante el sondeo:", pollError);
+          // No lanzamos el error aquí, seguimos intentando hasta agotar los intentos
+        }
       }
 
       if (runStatus !== "completed") {
-        throw new Error("La ejecución no se completó a tiempo");
+        throw new Error(`La ejecución no se completó. Último estado: ${runStatus} después de ${polls} intentos`);
       }
 
       // 6️⃣ Recuperar el último mensaje del asistente
+      console.log("Ejecución completada, recuperando respuesta...");
+      
       const assistantMsgsRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/messages?limit=1&order=desc`, {
         method: "GET",
         headers,
       });
       
       if (!assistantMsgsRes.ok) {
+        const errorText = await assistantMsgsRes.text();
+        console.error(`Error obteniendo mensajes [${assistantMsgsRes.status}]: ${errorText}`);
         throw new Error("No se pudieron leer los mensajes del asistente");
       }
       
@@ -191,9 +227,16 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
         "Lo siento, no he podido procesar tu solicitud.";
 
       setMessages(prev => [...prev, { id: prev.length + 1, text: assistantText, isBot: true }]);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error llamando a la Assistants API:", err);
-      setMessages(prev => [...prev, { id: prev.length + 1, text: "Lo siento, ha ocurrido un error al procesar tu solicitud.", isBot: true }]);
+      setMessages(prev => [
+        ...prev, 
+        { 
+          id: prev.length + 1, 
+          text: `Lo siento, ha ocurrido un error al procesar tu solicitud: ${err.message || 'Error desconocido'}`, 
+          isBot: true 
+        }
+      ]);
     } finally {
       setIsLoading(false);
     }
