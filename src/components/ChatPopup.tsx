@@ -1,7 +1,8 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Send, X, RefreshCw } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
 import ReactMarkdown from "react-markdown";
+// import { toast } from "@/components/ui/sonner"; // opcional si aún lo necesitas
 
 interface ChatPopupProps {
   onClose: () => void;
@@ -13,145 +14,201 @@ interface Message {
   isBot: boolean;
 }
 
+/**
+ * 👉 CONFIGURACIÓN
+ * - Crea tu Asistente en https://platform.openai.com/assistants y copia su `assistant_id`.
+ * - Añade VITE_OPENAI_ASSISTANT_ID y VITE_OPENAI_API_KEY en tu archivo .env.local.
+ *   ⚠️ Nunca expongas tu API‑Key en el frontend de producción; lo ideal es envolver las
+ *   llamadas en una ruta API server‑side (p.ej. /api/chat), pero aquí se muestra la llamada
+ *   directa por simplicidad.
+ */
+const ASSISTANT_ID = "asst_kIy7Mgl74E2FOUUbmYiSHGSZ";
+const OPENAI_API_KEY = "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";
+
 const ChatPopup = ({ onClose }: ChatPopupProps) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch session ID and messages from localStorage on component mount
+  // Cargar estado desde localStorage al montar
   useEffect(() => {
-    const storedSessionId = localStorage.getItem("chatSessionId");
+    const storedThreadId = localStorage.getItem("chatThreadId");
     const storedMessages = localStorage.getItem("chatMessages");
-    
-    if (storedSessionId) {
-      setSessionId(storedSessionId);
+
+    if (storedThreadId) {
+      setThreadId(storedThreadId);
     }
-    
+
     if (storedMessages) {
       try {
-        const parsedMessages = JSON.parse(storedMessages);
-        setMessages(parsedMessages);
-      } catch (error) {
-        console.error("Error parsing stored messages:", error);
-        setMessages([{
-          id: 1,
-          text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?",
-          isBot: true,
-        }]);
+        setMessages(JSON.parse(storedMessages));
+      } catch (err) {
+        console.error("Error al parsear mensajes almacenados:", err);
+        setMessages([{ id: 1, text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?", isBot: true }]);
       }
     } else {
-      setMessages([{
-        id: 1,
-        text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?",
-        isBot: true,
-      }]);
+      setMessages([{ id: 1, text: "¡Hola! Soy el chatbot de PoliFormaT. ¿En qué puedo ayudarte?", isBot: true }]);
     }
   }, []);
 
-  // Save messages to localStorage when they change
+  // Persistir mensajes
   useEffect(() => {
-    if (messages.length > 0) {
+    if (messages.length) {
       localStorage.setItem("chatMessages", JSON.stringify(messages));
     }
   }, [messages]);
 
-  // Scroll to bottom whenever messages change
+  // Scroll automático al fondo
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (message.trim() === "") return;
+    if (!message.trim()) return;
 
-    // Add user message
-    const userMessage = { id: messages.length + 1, text: message, isBot: false };
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+    // 1️⃣ Añadir el mensaje del usuario a la UI
+    let currentThread = threadId;
+    const userMsg = { id: messages.length + 1, text: message, isBot: false };
+    setMessages(prev => [...prev, userMsg]);
     setMessage("");
     setIsLoading(true);
 
     try {
-      // Prepare the request payload
-      const payload = {
-        question: message,
-        overrideConfig: {
-          sessionId: sessionId || undefined,
-        }
-      };
+      // Config común para las peticiones a OpenAI
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        "OpenAI-Beta": "assistants=v2", // cabecera requerida para Assistants API v2
+      } as const;
 
-      // Send the request to the API
-      const response = await fetch(
-        "https://flowiseai-railway-production-3cb4.up.railway.app/api/v1/prediction/5e4eda77-a540-40c1-ab88-0ef44972a56e",
+      // 2️⃣ Asegurar que existe un hilo (thread)
+      if (!currentThread) {
+        try {
+          const threadRes = await fetch("https://api.openai.com/v1/threads", {
+            method: "POST",
+            headers,
+            body: JSON.stringify({}),
+          });
+          
+          if (!threadRes.ok) {
+            const text = await threadRes.text();
+            console.error("Error creando hilo:", threadRes.status, text);
+            setMessages(prev => [
+              ...prev,
+              {
+                id: prev.length + 1,
+                text: `Error creando hilo (${threadRes.status}): ${text}`,
+                isBot: true,
+              },
+            ]);
+            setIsLoading(false);
+            return;
+          }
+          
+          const threadData = await threadRes.json();
+          currentThread = threadData.id;
+          setThreadId(currentThread);
+          localStorage.setItem("chatThreadId", currentThread);
+          
+        } catch (err: any) {
+          console.error("Error en fetch de creación de hilo:", err);
+          setMessages(prev => [
+            ...prev,
+            { id: prev.length + 1, text: `Error: ${err.message}`, isBot: true },
+          ]);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // 3️⃣ Enviar el mensaje del usuario al hilo
+      const msgRes = await fetch(
+        `https://api.openai.com/v1/threads/${currentThread}/messages`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+          headers,
+          body: JSON.stringify({ role: "user", content: message }),
         }
       );
-
-      if (!response.ok) {
-        throw new Error(`API responded with status: ${response.status}`);
-      }
-
-      const data = await response.json();
       
-      // Store the session ID for future requests if it's returned
-      if (data.sessionId) {
-        setSessionId(data.sessionId);
-        localStorage.setItem("chatSessionId", data.sessionId);
+      if (!msgRes.ok) {
+        const errorText = await msgRes.text();
+        console.error(`Error añadiendo mensaje [${msgRes.status}]: ${errorText}`);
+        throw new Error(`No se pudo añadir el mensaje (status ${msgRes.status}): ${errorText}`);
       }
 
-      // Only extract the text field from the API response
-      setMessages(prev => [
-        ...prev,
-        { 
-          id: prev.length + 1, 
-          text: data.text || "Lo siento, no he podido procesar tu solicitud.", 
-          isBot: true 
-        }
-      ]);
-    } catch (error) {
-      console.error("Error calling assistant API:", error);
-      // Add error message
-      setMessages(prev => [
-        ...prev,
-        { 
-          id: prev.length + 1, 
-          text: "Lo siento, ha ocurrido un error al procesar tu solicitud.", 
-          isBot: true 
-        }
-      ]);
+      // 4️⃣ Lanzar una ejecución (run) del asistente sobre el hilo
+      const runRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/runs`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ assistant_id: ASSISTANT_ID }),
+      });
+      
+      if (!runRes.ok) {
+        throw new Error("No se pudo iniciar la ejecución del asistente");
+      }
+      
+      const runData = await runRes.json();
+
+      // 5️⃣ Sondear hasta que la ejecución termine
+      let runStatus = runData.status;
+      const RUN_POLL_INTERVAL = 1000; // 1 s
+      const MAX_POLLS = 30; // 30 s máx.
+      let polls = 0;
+      
+      while (runStatus !== "completed" && runStatus !== "failed" && polls < MAX_POLLS) {
+        await new Promise(r => setTimeout(r, RUN_POLL_INTERVAL));
+        polls++;
+        const statusRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/runs/${runData.id}`, {
+          method: "GET",
+          headers,
+        });
+        
+        if (!statusRes.ok) break;
+        
+        const statusData = await statusRes.json();
+        runStatus = statusData.status;
+      }
+
+      if (runStatus !== "completed") {
+        throw new Error("La ejecución no se completó a tiempo");
+      }
+
+      // 6️⃣ Recuperar el último mensaje del asistente
+      const assistantMsgsRes = await fetch(`https://api.openai.com/v1/threads/${currentThread}/messages?limit=1&order=desc`, {
+        method: "GET",
+        headers,
+      });
+      
+      if (!assistantMsgsRes.ok) {
+        throw new Error("No se pudieron leer los mensajes del asistente");
+      }
+      
+      const assistantMsgsData = await assistantMsgsRes.json();
+      const assistantText = assistantMsgsData.data?.[0]?.content?.[0]?.text?.value ??
+        "Lo siento, no he podido procesar tu solicitud.";
+
+      setMessages(prev => [...prev, { id: prev.length + 1, text: assistantText, isBot: true }]);
+    } catch (err) {
+      console.error("Error llamando a la Assistants API:", err);
+      setMessages(prev => [...prev, { id: prev.length + 1, text: "Lo siento, ha ocurrido un error al procesar tu solicitud.", isBot: true }]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Reiniciar conversación
   const handleRefreshSession = () => {
-    // Clear session ID from state and localStorage
-    setSessionId(null);
-    localStorage.removeItem("chatSessionId");
-    // Clear messages from localStorage
+    setThreadId(null);
+    localStorage.removeItem("chatThreadId");
     localStorage.removeItem("chatMessages");
-    
-    // Add system message indicating the conversation has been reset
-    setMessages([
-      {
-        id: 1,
-        text: "¡Hola! Soy el chatbot de PoliFormaT. He iniciado una nueva conversación. ¿En qué puedo ayudarte?",
-        isBot: true,
-      }
-    ]);
-    
-    // Remove the toast notification - this line was removed
+    setMessages([{ id: 1, text: "¡Hola! Soy el chatbot de PoliFormaT. He iniciado una nueva conversación. ¿En qué puedo ayudarte?", isBot: true }]);
   };
 
-  // Handle closing the popup without refreshing the conversation
+  // Cerrar popup
   const handleClose = () => {
-    // We don't need to do anything with localStorage here as messages are already saved by useEffect
     onClose();
   };
 
@@ -160,41 +217,21 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
       <div className="bg-accent p-2 flex justify-between items-center">
         <h3 className="font-semibold text-white text-sm">Mensajes de chat</h3>
         <div className="flex items-center gap-2">
-          <button 
-            onClick={handleRefreshSession} 
-            className="text-white hover:text-gray-200"
-            title="Reiniciar conversación"
-          >
+          <button onClick={handleRefreshSession} className="text-white hover:text-gray-200" title="Reiniciar conversación">
             <RefreshCw size={16} />
           </button>
-          <button 
-            onClick={handleClose} 
-            className="text-white hover:text-gray-200"
-          >
+          <button onClick={handleClose} className="text-white hover:text-gray-200">
             <X size={16} />
           </button>
         </div>
       </div>
 
       <div className="flex-grow bg-white p-3 overflow-y-auto h-80">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`mb-3 ${
-              msg.isBot ? "text-left" : "text-right"
-            }`}
-          >
-            <div
-              className={`inline-block px-3 py-2 rounded-lg ${
-                msg.isBot
-                  ? "bg-gray-200 text-gray-800"
-                  : "bg-blue-500 text-white"
-              }`}
-            >
+        {messages.map(msg => (
+          <div key={msg.id} className={`mb-3 ${msg.isBot ? "text-left" : "text-right"}`}>
+            <div className={`inline-block px-3 py-2 rounded-lg ${msg.isBot ? "bg-gray-200 text-gray-800" : "bg-blue-500 text-white"}`}>
               {msg.isBot ? (
-                <ReactMarkdown className="prose prose-sm max-w-none">
-                  {msg.text}
-                </ReactMarkdown>
+                <ReactMarkdown className="prose prose-sm max-w-none">{msg.text}</ReactMarkdown>
               ) : (
                 msg.text
               )}
@@ -219,19 +256,17 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={e => setMessage(e.target.value)}
           placeholder="Escribe un mensaje..."
           className="flex-grow p-2 border rounded-md text-sm text-black"
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleSendMessage();
-            }
+          onKeyPress={e => {
+            if (e.key === "Enter") handleSendMessage();
           }}
           disabled={isLoading}
         />
         <button
           onClick={handleSendMessage}
-          className={`bg-accent hover:bg-accent/90 text-white p-2 rounded-md ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`bg-accent hover:bg-accent/90 text-white p-2 rounded-md ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={isLoading}
         >
           <Send size={16} />
